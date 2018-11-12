@@ -1,0 +1,79 @@
+{
+  "name": "lc-lambda-utils",
+  "version": "0.1.0",
+  "description": "Shared Utilities for Lightning CI Lambda Functions",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "mkdir -p lib; rm -r lib; mkdir -p test-results; rm -r test-results;",
+    "lint": "tslint --project '.'",
+    "prestart": "npm run build",
+    "start": "node lib/index.js",
+    "prebuild": "npm run clean && npm run lint",
+    "build": "tsc & wait",
+    "pretest": "npm run build",
+    "test": "jest --ci --reporters=\"jest-junit\" --coverageReporters=\"cobertura\"",
+    "pretest:local": "npm run build",
+    "test:local": "jest --watchAll --coverageReporters=\"text\"",
+    "prepublishOnly": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juxttech/lc-lambda-utils.git"
+  },
+  "keywords": [
+    "lc",
+    "lambda",
+    "fetch"
+  ],
+  "author": "Juxtapose Technologies",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/juxttech/lc-lambda-utils/issues"
+  },
+  "homepage": "https://github.com/juxttech/lc-lambda-utils#readme",
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/nock": "^9.3.0",
+    "@types/node": "^10.9.4",
+    "@types/node-fetch": "^2.1.2",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.4.2",
+    "jest": "^23.5.0",
+    "jest-junit": "^5.1.0",
+    "nock": "^10.0.2",
+    "ts-jest": "^23.1.4",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.10.0",
+    "typescript": "^3.0.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "./test-results/coverage",
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "jest-junit": {
+    "output": "./test-results/unit/junit.xml"
+  },
+  "dependencies": {
+    "node-fetch": "^2.2.1",
+    "slack-webhook-logger": "^0.1.0",
+    "sumologic-logger": "^0.1.0"
+  }
+}
