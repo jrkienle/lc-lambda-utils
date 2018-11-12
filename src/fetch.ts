@@ -14,23 +14,6 @@ export class FetchError extends Error {
   }
 }
 
-export const handleFetchSuccess = (data: any, status: number, sumoProps?: any) => {
-  const sumologicLogger = new SumologicLogger(process.env.SUMO_URL as string);
-
-  sumologicLogger.info({
-    data,
-    ...sumoProps,
-  });
-
-  return {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify({ data }),
-    statusCode: status,
-  };
-};
-
 export const handleFetchError = (err: FetchError | any, lambdaName: string, sumoProps?: any) => {
   const sumologicLogger = new SumologicLogger(process.env.SUMO_URL as string);
   const slackLogger = new SlackLogger(process.env.SLACK_URL as string, false);
@@ -74,7 +57,7 @@ export const handleFetchError = (err: FetchError | any, lambdaName: string, sumo
   };
 };
 
-const fetch = async (url: string, options?: RequestInit) => nodeFetch(url, {
+const fetch = (url: string, options?: RequestInit) => nodeFetch(url, {
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -82,13 +65,14 @@ const fetch = async (url: string, options?: RequestInit) => nodeFetch(url, {
   ...options,
 })
   .then(async (res) => {
-    const status = res.status;
-    const json = await res.json();
-
-    if (res.status >= 200 && res.status < 300) {
-      return json;
+    const resClone = res.clone();
+    try {
+      const body = await res.json();
+      return { body, status: res.status };
+    } catch (e) {
+      const text = await resClone.text();
+      throw new FetchError(text, resClone.status);
     }
-    throw new FetchError(json.error, status, json.error_description);
   });
 
 export default fetch;

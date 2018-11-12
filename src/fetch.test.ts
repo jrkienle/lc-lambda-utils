@@ -2,7 +2,7 @@ import nock from 'nock';
 import * as sumoLogger from 'sumologic-logger';
 import * as slackLogger from 'slack-webhook-logger';
 
-import fetch, { handleFetchError, handleFetchSuccess, FetchError } from './fetch';
+import fetch, { handleFetchError, FetchError } from './fetch';
 
 describe('fetch.ts', () => {
   describe('FetchError', () => {
@@ -12,38 +12,6 @@ describe('fetch.ts', () => {
       expect(error.clientError).toBe('An unknown error has occurred');
       expect(error.code).toBe(500);
       expect(error.message).toBe('foo');
-    });
-  });
-
-  describe('handleFetchSuccess', () => {
-    let sumoLoggerSpy: jest.SpyInstance;
-
-    const mockLogger = {
-      error: jest.fn(),
-      info: jest.fn(),
-      warn: jest.fn(),
-    };
-
-    beforeEach(() => {
-      sumoLoggerSpy = jest.spyOn(sumoLogger, 'Logger');
-      sumoLoggerSpy.mockImplementation(() => mockLogger);
-    });
-
-    afterEach(() => {
-      sumoLoggerSpy.mockRestore();
-      mockLogger.error.mockRestore();
-      mockLogger.info.mockRestore();
-      mockLogger.warn.mockRestore();
-    });
-
-    test('should return a given body and status code', async () => {
-      const res = handleFetchSuccess({ foo: 'bar' }, 201);
-
-      expect(JSON.parse(res.body).data.foo).toBe('bar');
-      expect(res.statusCode).toBe(201);
-      expect(mockLogger.error).toBeCalledTimes(0);
-      expect(mockLogger.info).toBeCalledTimes(1);
-      expect(mockLogger.warn).toBeCalledTimes(0);
     });
   });
 
@@ -102,13 +70,14 @@ describe('fetch.ts', () => {
 
       const fetchResults = await fetch('http://foo.com/bar');
 
-      expect(fetchResults.foo).toBe('bar');
+      expect(fetchResults.body.foo).toBe('bar');
+      expect(fetchResults.status).toBe(200);
     });
 
-    test('should throw a FetchError if response code is less than 200 or 400+', async () => {
+    test('should throw a FetchError if calling json() while parsing the res fails', async () => {
       nock('http://foo.com')
         .get('/bar')
-        .reply(400, { foo: 'bar' });
+        .reply(400, 'foo');
 
       const fetchResults = await fetch('http://foo.com/bar')
       .catch(err => err);

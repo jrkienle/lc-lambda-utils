@@ -14,9 +14,8 @@ declare class FetchError extends Error {
   constructor(data: any, status: number, additionalSuccessProps?: any);
 }
 
-declare function fetch(url: string, options?: RequestInit): Promise<any>;
-declare function handleFetchSuccess(data: any, status: number, sumoProps?: any): LambdaResponse;
+declare function fetch(url: string, options?: RequestInit): Promise<{ body: any, status: number }>;
 declare function handleFetchError(
   err: FetchError | any, lambdaName: string, sumoProps?: any): LambdaResponse;
 
-export { fetch, handleFetchError, handleFetchSuccess, FetchError, LambdaResponse };
+export { fetch, handleFetchError, FetchError, LambdaResponse };

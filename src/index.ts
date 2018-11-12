@@ -1,3 +1,3 @@
-import fetch, { handleFetchError, handleFetchSuccess } from './fetch';
+import fetch, { handleFetchError } from './fetch';
 
-export { fetch, handleFetchError, handleFetchSuccess };
+export { fetch, handleFetchError };
