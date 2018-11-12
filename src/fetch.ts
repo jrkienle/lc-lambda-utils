@@ -1,4 +1,4 @@
-import nodeFetch, { Response, RequestInit } from 'node-fetch';
+import nodeFetch, { RequestInit } from 'node-fetch';
 import { Logger as SumologicLogger } from 'sumologic-logger';
 import { Logger as SlackLogger } from 'slack-webhook-logger';
 
@@ -14,12 +14,12 @@ export class FetchError extends Error {
   }
 }
 
-export const handleFetchSuccess = (data: any, status: number, additionalSuccessProps?: any) => {
+export const handleFetchSuccess = (data: any, status: number, sumoProps?: any) => {
   const sumologicLogger = new SumologicLogger(process.env.SUMO_URL as string);
 
   sumologicLogger.info({
     data,
-    ...additionalSuccessProps,
+    ...sumoProps,
   });
 
   return {
@@ -31,7 +31,7 @@ export const handleFetchSuccess = (data: any, status: number, additionalSuccessP
   };
 };
 
-export const handleFetchError = (err: FetchError | any, additionalErrorProps?: any) => {
+export const handleFetchError = (err: FetchError | any, lambdaName: string, sumoProps?: any) => {
   const sumologicLogger = new SumologicLogger(process.env.SUMO_URL as string);
   const slackLogger = new SlackLogger(process.env.SLACK_URL as string, false);
 
@@ -53,7 +53,7 @@ export const handleFetchError = (err: FetchError | any, additionalErrorProps?: a
         value: err.code,
         short: false,
       }],
-      footer: 'lc-authenticate-get',
+      footer: lambdaName,
       ts: new Date().getTime() / 1000,
     }],
   });
@@ -62,7 +62,7 @@ export const handleFetchError = (err: FetchError | any, additionalErrorProps?: a
     code: err.code,
     message: err.clientError,
     innerError: err.message,
-    ...additionalErrorProps,
+    ...sumoProps,
   });
 
   return {
@@ -74,7 +74,7 @@ export const handleFetchError = (err: FetchError | any, additionalErrorProps?: a
   };
 };
 
-const fetch = async (url: string, options?: RequestInit): Promise<Response> => nodeFetch(url, {
+const fetch = async (url: string, options?: RequestInit) => nodeFetch(url, {
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
