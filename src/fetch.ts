@@ -1,4 +1,4 @@
-import nodeFetch, { RequestInit } from 'node-fetch';
+import nodeFetch, { Response, RequestInit } from 'node-fetch';
 import { Logger as SumologicLogger } from 'sumologic-logger';
 import { Logger as SlackLogger } from 'slack-webhook-logger';
 
@@ -74,7 +74,7 @@ export const handleFetchError = (err: FetchError | any, additionalErrorProps?: a
   };
 };
 
-const fetch = async (url: string, options?: RequestInit) => nodeFetch(url, {
+const fetch = async (url: string, options?: RequestInit): Promise<Response> => nodeFetch(url, {
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

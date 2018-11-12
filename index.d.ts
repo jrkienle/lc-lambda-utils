@@ -1,9 +1,21 @@
-declare class Logger {
-  constructor(url: string, logInConsole: boolean);
+import { Response, RequestInit } from 'node-fetch';
 
-  info(message: string | any): VoidFunction
-  warn(message: string | any): VoidFunction
-  error(message: string | any): VoidFunction
+interface LambdaResponse {
+  headers: {
+    'Access-Control-Allow-Origin': '*';
+  };
+  body: string;
+  statusCode: number;
 }
 
-export { Logger };
+declare class FetchError extends Error {
+  public clientError: string;
+  public code: number;
+  constructor(data: any, status: number, additionalSuccessProps?: any);
+}
+
+declare function fetch(url: string, options?: RequestInit): Promise<Response>;
+declare function handleFetchSuccess(data: any, status: number, additionalSuccessProps?: any): LambdaResponse;
+declare function handleFetchError(err: FetchError | any, additionalErrorProps?: any): LambdaResponse;
+
+export { fetch };
