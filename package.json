@@ -1,7 +1,7 @@
 {
   "name": "lc-lambda-utils",
   "version": "0.1.0",
-  "description": "Send your application's logs to a Slack Webhook",
+  "description": "Shared Utilities for Lightning CI Lambda Functions",
   "main": "lib/index.js",
   "scripts": {
     "clean": "mkdir -p lib; rm -r lib; mkdir -p test-results; rm -r test-results;",
