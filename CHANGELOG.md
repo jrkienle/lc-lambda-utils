@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.2] - 2018-11-11
+
+### Added
+
+- Added additional exports in typings for proper typescript support
+
 ## [0.1.1] - 2018-11-11
 
 ### Added
