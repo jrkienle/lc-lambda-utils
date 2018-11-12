@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0] - 2018-11-12
+
+### Added
+
+- Support for APIs besides Github
+- Better error handling
+- Text response support
+
+### Removed
+
+- handleFetchSuccess removed
+
 ## [0.1.2] - 2018-11-11
 
 ### Added
