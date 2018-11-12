@@ -13,17 +13,19 @@
 ## Usage
 
 ```typescript
-import { fetch, handleFetchError, handleFetchSuccess } from 'lc-lambda-utils';
+import { fetch, handleFetchError, FetchError } from 'lc-lambda-utils';
 
 // Warning: env variables SUMO_URL and SLACK_URL must be present before using fetch responses
 
 const fetchSomething = async () => {
   const fetchResults = await fetch('foo' { method: 'POST' })
     .then((res) => {
+      if (someCondition) {
+        throw new FetchError('an error for developers', 500, 'an error for the end user');
+      }
       // Do something additional with the response if you want
       return res;
     })
-    .then((parsedRes) => handleFetchSuccess(parsedRes))
     .catch((err) => handleFetchError(err));
 };
 ```
