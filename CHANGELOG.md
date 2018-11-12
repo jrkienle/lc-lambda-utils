@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.1] - 2018-11-12
+
+### Added
+
+- Added export for FetchError
+
+### Changed
+
+- Fixed docs
+
 ## [0.2.0] - 2018-11-12
 
 ### Added
