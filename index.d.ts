@@ -19,4 +19,4 @@ declare function handleFetchSuccess(data: any, status: number, sumoProps?: any):
 declare function handleFetchError(
   err: FetchError | any, lambdaName: string, sumoProps?: any): LambdaResponse;
 
-export { fetch };
+export { fetch, handleFetchError, handleFetchSuccess };
