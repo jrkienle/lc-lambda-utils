@@ -74,7 +74,7 @@ describe('fetch.ts', () => {
     });
 
     test('should return a 500 by default if provided error is not a FetchError', async () => {
-      const res = handleFetchError(new Error('foo'));
+      const res = handleFetchError(new Error('foo'), 'bar');
 
       expect(JSON.parse(res.body).message).toBe('An unknown error has occurred');
       expect(res.statusCode).toBe(500);
@@ -84,7 +84,7 @@ describe('fetch.ts', () => {
     });
 
     test('should return a given FetchError and client error', async () => {
-      const res = handleFetchError(new FetchError('foo', 404, 'Not found'));
+      const res = handleFetchError(new FetchError('foo', 404, 'Not found'), 'bar');
 
       expect(JSON.parse(res.body).message).toBe('Not found');
       expect(res.statusCode).toBe(404);

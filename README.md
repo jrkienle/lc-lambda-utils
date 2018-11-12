@@ -15,8 +15,10 @@
 ```typescript
 import { fetch, handleFetchError, handleFetchSuccess } from 'lc-lambda-utils';
 
-const doSomething = async () => {
-  const fetchSomething = await fetch('foo' { method: 'POST' })
+// Warning: env variables SUMO_URL and SLACK_URL must be present before using fetch responses
+
+const fetchSomething = async () => {
+  const fetchResults = await fetch('foo' { method: 'POST' })
     .then((res) => {
       // Do something additional with the response if you want
       return res;

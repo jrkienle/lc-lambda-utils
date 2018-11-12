@@ -1,4 +1,4 @@
-import { Response, RequestInit } from 'node-fetch';
+import { RequestInit } from 'node-fetch';
 
 interface LambdaResponse {
   headers: {
@@ -14,8 +14,9 @@ declare class FetchError extends Error {
   constructor(data: any, status: number, additionalSuccessProps?: any);
 }
 
-declare function fetch(url: string, options?: RequestInit): Promise<Response>;
-declare function handleFetchSuccess(data: any, status: number, additionalSuccessProps?: any): LambdaResponse;
-declare function handleFetchError(err: FetchError | any, additionalErrorProps?: any): LambdaResponse;
+declare function fetch(url: string, options?: RequestInit): Promise<any>;
+declare function handleFetchSuccess(data: any, status: number, sumoProps?: any): LambdaResponse;
+declare function handleFetchError(
+  err: FetchError | any, lambdaName: string, sumoProps?: any): LambdaResponse;
 
 export { fetch };
