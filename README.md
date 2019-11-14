@@ -1,3 +1,5 @@
+> **DEPRECATED** This package has been deprecated, and will receive no further updates or support from Kienle Holdings.
+
 # lc-lambda-utils
 
 > Shared Utilities for Lightning CI Lambda Functions
